@@ -1,8 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { voteAnecdote } from '../reducers/anecdoteReducer.js';
+import { voteAnecdoteAction } from '../reducers/anecdoteReducer.js';
 import { setNotification } from '../reducers/notificationReducer.js';
 import { useCallback } from 'react';
-import anecdotesService from '../services/anecdotesService.js';
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => {
@@ -14,11 +13,7 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
 
   const vote = useCallback(async (id) => {
-    await anecdotesService.update(id, {
-      ...anecdotes.find(a => a.id === id),
-      votes: anecdotes.find(a => a.id === id).votes + 1
-    })
-    dispatch(voteAnecdote(id))
+    dispatch(voteAnecdoteAction(id))
     dispatch(setNotification(`you voted '${anecdotes.find(a => a.id === id).content}'`, 5))
   }, [anecdotes, dispatch])
 
